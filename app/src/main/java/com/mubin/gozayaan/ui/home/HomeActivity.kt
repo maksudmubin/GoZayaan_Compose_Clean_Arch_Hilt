@@ -44,18 +44,16 @@ class HomeActivity : ComponentActivity() {
                         block = {
                             scope.launch {
                                 executeBodyOrReturnNullSuspended {
-                                    vm.uiState.setLoading(true)
-                                    vm.uiState.setShowRootLayout(false)
+                                    vm.uiState.setIsLoading(true)
 
                                     val response = vm.getDestinations()
                                     if (response == null) {
                                         shouldShowDialog.value = true
                                     } else {
-                                        vm.uiState.setResponse(response)
-                                        vm.uiState.setShowRootLayout(true)
+                                        vm.uiState.setRemoteResponse(response)
                                     }
 
-                                    vm.uiState.setLoading(false)
+                                    vm.uiState.setIsLoading(false)
 
                                 }
                             }

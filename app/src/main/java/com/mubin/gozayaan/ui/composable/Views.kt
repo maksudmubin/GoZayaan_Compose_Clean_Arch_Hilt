@@ -147,28 +147,28 @@ fun BottomNavGraph(navController: NavHostController, uiState: HomeUiState) {
     ) {
         // Home screen - default bottom navigation screen
         composable(route = BottomNavItem.Home.route) {
-            uiState.hideBottomNav = false  // Make sure the bottom nav is visible
+            uiState.hideBottomNav(false)  // Make sure the bottom nav is visible
             GzLogger.d("BottomNavGraph", "Navigating to Home Screen")
             HomeScreen(uiState, navController)
         }
 
         // Bookmark screen - view saved items
         composable(route = BottomNavItem.Bookmark.route) {
-            uiState.hideBottomNav = false  // Bottom nav remains visible
+            uiState.hideBottomNav(false)  // Bottom nav remains visible
             GzLogger.d("BottomNavGraph", "Navigating to Bookmark Screen")
             BookmarkScreen(uiState)
         }
 
         // Notifications screen - shows alerts and messages
         composable(route = BottomNavItem.Notifications.route) {
-            uiState.hideBottomNav = false  // Keep bottom nav visible
+            uiState.hideBottomNav(false)  // Keep bottom nav visible
             GzLogger.d("BottomNavGraph", "Navigating to Notifications Screen")
             NotificationsScreen(uiState)
         }
 
         // Profile screen - view or edit user profile
         composable(route = BottomNavItem.Profile.route) {
-            uiState.hideBottomNav = false  // Bottom nav remains visible
+            uiState.hideBottomNav(false)  // Bottom nav remains visible
             GzLogger.d("BottomNavGraph", "Navigating to Profile Screen")
             ProfileScreen(uiState)
         }
@@ -178,7 +178,7 @@ fun BottomNavGraph(navController: NavHostController, uiState: HomeUiState) {
             route = "recommended/{isSearch}",
             arguments = listOf(navArgument("isSearch") { type = NavType.BoolType })
         ) { backStackEntry ->
-            uiState.hideBottomNav = true  // Hide bottom nav for detailed views
+            uiState.hideBottomNav(true)  // Hide bottom nav for detailed views
             val isSearch = backStackEntry.arguments?.getBoolean("isSearch", false) ?: false
             GzLogger.d("BottomNavGraph", "Navigating to Recommended Screen, isSearch: $isSearch")
             RecommendedScreen(isSearch, uiState, navController)
@@ -189,7 +189,7 @@ fun BottomNavGraph(navController: NavHostController, uiState: HomeUiState) {
             route = "details/{index}",
             arguments = listOf(navArgument("index") { type = NavType.IntType })
         ) { backStackEntry ->
-            uiState.hideBottomNav = true  // Hide bottom nav for detailed views
+            uiState.hideBottomNav(true)  // Hide bottom nav for detailed views
             val index = backStackEntry.arguments?.getInt("index")
             GzLogger.d("BottomNavGraph", "Navigating to Details Screen, index: $index")
             DetailsScreen(index?.let { uiState.response?.get(it) }, navController)

@@ -14,7 +14,6 @@ import com.mubin.gozayaan.data.model.DestinationResponse
  * Variables:
  * - `query`: Stores the search query entered by the user.
  * - `isLoading`: Indicates if the UI is in a loading state.
- * - `showRootLayout`: Determines if the root layout should be visible.
  * - `hideBottomNav`: Controls the visibility of the bottom navigation bar.
  * - `response`: Holds the API response or data for destinations.
  */
@@ -27,10 +26,6 @@ class HomeUiState {
 
     // Indicates whether a loading indicator should be displayed
     var isLoading by mutableStateOf(false)
-        private set
-
-    // Controls the visibility of the root layout
-    var showRootLayout by mutableStateOf(false)
         private set
 
     // Controls the visibility of the bottom navigation bar
@@ -56,19 +51,9 @@ class HomeUiState {
      *
      * @param value The new loading state.
      */
-    fun setLoading(value: Boolean) {
+    fun setIsLoading(value: Boolean) {
         isLoading = value
         GzLogger.d("HomeUiState", "Loading state updated to: $value")
-    }
-
-    /**
-     * Updates the visibility of the root layout and logs the change.
-     *
-     * @param value Whether the root layout should be visible.
-     */
-    fun setShowRootLayout(value: Boolean) {
-        showRootLayout = value
-        GzLogger.d("HomeUiState", "Root layout visibility updated to: $value")
     }
 
     /**
@@ -76,7 +61,7 @@ class HomeUiState {
      *
      * @param value Whether the bottom navigation should be hidden.
      */
-    fun setHideBottomNav(value: Boolean) {
+    fun hideBottomNav(value: Boolean) {
         hideBottomNav = value
         GzLogger.d("HomeUiState", "Bottom navigation visibility updated to: $value")
     }
@@ -86,7 +71,7 @@ class HomeUiState {
      *
      * @param value The new response.
      */
-    fun setResponse(value: DestinationResponse?) {
+    fun setRemoteResponse(value: DestinationResponse?) {
         response = value
         GzLogger.d("HomeUiState", "Response updated: ${value?.size ?: "null"} items")
     }
