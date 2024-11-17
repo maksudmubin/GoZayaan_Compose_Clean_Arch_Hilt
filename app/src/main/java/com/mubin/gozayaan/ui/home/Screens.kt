@@ -2,6 +2,7 @@ package com.mubin.gozayaan.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,10 +44,13 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mubin.gozayaan.R
 import com.mubin.gozayaan.base.theme.Background
 import com.mubin.gozayaan.base.theme.GoZayaanTheme
+import com.mubin.gozayaan.base.theme.Surface
+import com.mubin.gozayaan.base.theme.gradient
 import com.mubin.gozayaan.base.utils.RubikFontBold
 import com.mubin.gozayaan.base.utils.RubikFontMedium
 import com.mubin.gozayaan.base.utils.RubikFontRegular
 import com.mubin.gozayaan.base.utils.executionlocker.withExecutionLocker
+import com.mubin.gozayaan.base.utils.getCurrencySymbol
 import com.mubin.gozayaan.base.utils.logger.GzLogger
 import com.mubin.gozayaan.data.model.DestinationResponse
 import com.mubin.gozayaan.ui.composable.AutoImageSlider
@@ -57,6 +63,7 @@ import com.mubin.gozayaan.ui.composable.HomeTopBar
 import com.mubin.gozayaan.ui.composable.RecommendationCardVertical
 import com.mubin.gozayaan.ui.composable.RecommendedRow
 import com.mubin.gozayaan.ui.composable.SearchBar
+import java.util.Locale
 
 /**
  * Composable function to display the main screen of the application.
@@ -395,8 +402,8 @@ fun RecommendedScreen(isSearch: Boolean, uiState: HomeUiState, navController: Na
  * This screen includes an image slider, property details such as name, rating, location,
  * and a detailed description of the destination.
  *
- * @param item The destination item to display details for.
- * @param navController Navigation controller to manage back navigation.
+ * @param item The destination item to display details for. This contains information about the property such as name, rating, location, description, etc.
+ * @param navController Navigation controller to manage back navigation. It is used to navigate back to the previous screen.
  */
 @Composable
 fun DetailsScreen(item: DestinationResponse.DestinationResponseItem?, navController: NavController) {
@@ -406,133 +413,278 @@ fun DetailsScreen(item: DestinationResponse.DestinationResponseItem?, navControl
     // Ensures the status bar is hidden for this screen
     ShowHideStatusBarScreen(isVisible = false)
 
-    Column(
+    // Root Box to contain the entire UI
+    Box(
         modifier = Modifier
-            .background(Background)
-            .fillMaxSize()
+            .background(Background) // Sets the background color for the entire screen
+            .fillMaxSize() // Ensures the Box takes up the full size of the screen
     ) {
-        // Display the auto image slider with back navigation
-        AutoImageSlider(
-            imageUrls = item?.detailImages,
-            onBackPressed = {
-                // Log back button press
-                GzLogger.d("DetailsScreen", "Back button pressed")
-                withExecutionLocker(1000) {
-                    navController.popBackStack()
-                }
-            }
-        )
 
-        // Display the property name and rating
-        Row(
+        // Column for property details such as name, rating, location, and description
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 40.dp)
-                .padding(horizontal = 30.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .background(Background) // Background color for the column
+                .fillMaxWidth() // Ensures the column fills the width of the screen
+                .align(Alignment.TopCenter) // Aligns the column at the top center of the screen
         ) {
-            item?.propertyName?.let { propertyName ->
-                val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-                Text(
-                    modifier = Modifier
-                        .width(screenWidth.times(0.7f)),
-                    color = Color.White,
-                    fontFamily = RubikFontBold,
-                    fontSize = 24.sp,
-                    text = propertyName,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    style = TextStyle(
-                        platformStyle = PlatformTextStyle(
-                            includeFontPadding = false
+            // Display the auto image slider with back navigation
+            AutoImageSlider(
+                imageUrls = item?.detailImages, // List of image URLs for the slider
+                onBackPressed = {
+                    // Log back button press event
+                    GzLogger.d("DetailsScreen", "Back button pressed")
+                    withExecutionLocker(1000) {
+                        navController.popBackStack() // Navigates back when back button is pressed
+                    }
+                }
+            )
+
+            // Display the property name and rating
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth() // Ensures the row fills the entire width
+                    .padding(top = 40.dp)
+                    .padding(horizontal = 30.dp), // Padding for the row
+                horizontalArrangement = Arrangement.SpaceBetween, // Space between the items
+                verticalAlignment = Alignment.CenterVertically // Centers items vertically
+            ) {
+                item?.propertyName?.let { propertyName -> // Displays the property name
+                    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+                    Text(
+                        modifier = Modifier
+                            .width(screenWidth.times(0.7f)), // Makes the property name take up 70% of the screen width
+                        color = Color.White, // White color for the text
+                        fontFamily = RubikFontBold, // Custom font style for the property name
+                        fontSize = 24.sp, // Font size for the property name
+                        text = propertyName,
+                        maxLines = 2, // Ensures the text doesn't overflow more than 2 lines
+                        overflow = TextOverflow.Ellipsis, // Adds ellipsis when text overflows
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false // Ensures no extra padding is applied
+                            )
                         )
                     )
-                )
+                }
+
+                // Display the rating of the property
+                item?.rating?.let { rating ->
+                    Row(
+                        modifier = Modifier,
+                        verticalAlignment = Alignment.CenterVertically // Centers the items vertically in the Row
+                    ) {
+                        // Display rating icon
+                        Image(
+                            painter = painterResource(R.drawable.ic_details_rating),
+                            contentDescription = "Rating"
+                        )
+                        Spacer(modifier = Modifier.size(4.dp)) // Adds space between the icon and text
+                        // Display rating value
+                        Text(
+                            modifier = Modifier.alpha(0.7f), // Slight transparency for the rating text
+                            color = Color.White,
+                            fontFamily = RubikFontRegular, // Regular font style for the rating
+                            fontSize = 14.sp, // Font size for the rating text
+                            text = rating.toString()
+                        )
+                    }
+                }
             }
 
-            item?.rating?.let { rating ->
-                Row(
-                    modifier = Modifier,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_details_rating),
-                        contentDescription = "Rating"
-                    )
-                    Spacer(modifier = Modifier.size(4.dp))
+            // Display the location of the property
+            Row(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .padding(horizontal = 30.dp), // Padding for the location row
+                verticalAlignment = Alignment.CenterVertically // Vertically centers the content
+            ) {
+                // Location icon
+                Image(
+                    painter = painterResource(R.drawable.ic_location_filled),
+                    contentDescription = "Location"
+                )
+                Spacer(modifier = Modifier.size(4.dp)) // Adds space between the icon and text
+                item?.location?.let { location ->
+                    // Display the location name
                     Text(
-                        modifier = Modifier.alpha(0.7f),
+                        modifier = Modifier.alpha(0.7f), // Applies transparency to the text
                         color = Color.White,
-                        fontFamily = RubikFontRegular,
-                        fontSize = 14.sp,
-                        text = rating.toString()
+                        fontFamily = RubikFontRegular, // Regular font style for the location
+                        fontSize = 14.sp, // Font size for the location text
+                        maxLines = 1, // Ensures text doesn't wrap
+                        overflow = TextOverflow.Ellipsis, // Adds ellipsis when the text overflows
+                        text = location
                     )
                 }
             }
-        }
 
-        // Display the location of the property
-        Row(
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .padding(horizontal = 30.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_location_filled),
-                contentDescription = "Location"
-            )
-            Spacer(modifier = Modifier.size(4.dp))
-            item?.location?.let { location ->
+            // Display the "About This Trip" section title
+            Row(
+                modifier = Modifier
+                    .padding(top = 30.dp)
+                    .padding(horizontal = 30.dp), // Padding for the "About This Trip" section
+                verticalAlignment = Alignment.CenterVertically // Centers the text and icon
+            ) {
                 Text(
-                    modifier = Modifier.alpha(0.7f),
+                    modifier = Modifier,
+                    color = Color.White.copy(alpha = 0.9f), // Slight transparency for the section title
+                    fontFamily = RubikFontMedium, // Medium font style for the title
+                    fontSize = 18.sp, // Font size for the section title
+                    maxLines = 1, // Ensures the text doesn't wrap
+                    overflow = TextOverflow.Ellipsis, // Adds ellipsis if the text overflows
+                    text = "About This Trip"
+                )
+                Spacer(modifier = Modifier.size(6.dp)) // Adds space between the text and the icon
+                // Emoji icon for the "About This Trip" section
+                Image(
+                    painter = painterResource(R.drawable.ic_star_eyes_emoji),
+                    contentDescription = "Location"
+                )
+            }
+
+            // Display the description of the trip
+            item?.description?.let { description ->
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth() // Ensures the text takes up the full width
+                        .padding(top = 12.dp)
+                        .padding(horizontal = 30.dp), // Adds padding to the description
                     color = Color.White,
-                    fontFamily = RubikFontRegular,
-                    fontSize = 14.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    text = location
+                    fontFamily = RubikFontMedium, // Medium font style for the description
+                    fontSize = 18.sp, // Font size for the description text
+                    text = description
                 )
             }
         }
 
-        // Display the "About This Trip" section title
-        Row(
+        // Bottom section of the screen containing fare details and the "Book Now" button
+        Column(
             modifier = Modifier
-                .padding(top = 30.dp)
-                .padding(horizontal = 30.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth() // Ensures the column takes up the full width
+                .background(Background) // Sets the background color
+                .align(Alignment.BottomCenter) // Aligns the column at the bottom center
         ) {
-            Text(
-                modifier = Modifier,
-                color = Color.White.copy(alpha = 0.9f),
-                fontFamily = RubikFontMedium,
-                fontSize = 18.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                text = "About This Trip"
-            )
-            Spacer(modifier = Modifier.size(6.dp))
-            Image(
-                painter = painterResource(R.drawable.ic_star_eyes_emoji),
-                contentDescription = "Location"
-            )
-        }
 
-        // Display the description of the trip
-        item?.description?.let { description ->
-            Text(
+            // Divider between content and bottom section
+            HorizontalDivider(color = Surface)
+
+            // Row containing fare details and "Book Now" button
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp)
-                    .padding(horizontal = 30.dp)
-                    .alpha(0.7f),
-                color = Color.White,
-                fontFamily = RubikFontMedium,
-                fontSize = 18.sp,
-                text = description
-            )
+                    .fillMaxWidth() // Ensures the row fills the entire width
+                    .padding(horizontal = 30.dp) // Adds horizontal padding
+                    .padding(
+                        top = 12.dp, // Adds top padding to create space above the row
+                        bottom = 36.dp // Adds bottom padding to create space below the row
+                    ),
+                verticalAlignment = Alignment.CenterVertically, // Centers items vertically
+                horizontalArrangement = Arrangement.SpaceBetween // Spreads the items evenly across the row
+            ) {
+
+                // Row to display currency symbol, fare, and fare unit
+                Row(
+                    modifier = Modifier,
+                    verticalAlignment = Alignment.CenterVertically, // Centers items vertically in the row
+                    horizontalArrangement = Arrangement.SpaceEvenly // Evenly spaces the items horizontally
+                ) {
+                    // Display the currency symbol, e.g., "$"
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 2.dp),
+                        color = Color.White.copy(alpha = 0.9f), // Slight transparency for the text
+                        fontFamily = RubikFontBold, // Bold font for the currency symbol
+                        fontSize = 12.sp, // Font size for the currency symbol
+                        text = item?.currency?.getCurrencySymbol() ?: "", // Displays the currency symbol
+                        maxLines = 1, // Ensures the text doesn't wrap
+                        overflow = TextOverflow.Ellipsis, // Adds ellipsis when the text overflows
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false // No font padding
+                            )
+                        )
+                    )
+
+                    // Spacer to create space between currency and fare
+                    Spacer(
+                        modifier = Modifier
+                            .size(2.dp) // Adds a small gap between elements
+                    )
+
+                    // Display the fare value, e.g., "5432"
+                    Text(
+                        modifier = Modifier,
+                        color = Color.White.copy(alpha = 0.9f),
+                        fontFamily = RubikFontMedium, // Medium font style for the fare value
+                        fontSize = 16.sp, // Font size for the fare value
+                        text = item?.fare?.toString() ?: "----", // Displays the fare value
+                        maxLines = 1, // Ensures the text doesn't wrap
+                        overflow = TextOverflow.Ellipsis, // Adds ellipsis when text overflows
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false // No font padding
+                            )
+                        )
+                    )
+
+                    // Spacer to create space between fare and fare unit
+                    Spacer(
+                        modifier = Modifier
+                            .size(2.dp) // Adds small gap between fare and fare unit
+                    )
+
+                    // Display the fare unit, e.g., "/PER DAY"
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 2.dp)
+                            .alpha(0.3f), // Adds slight transparency to the fare unit text
+                        color = Color.White.copy(alpha = 0.9f),
+                        fontFamily = RubikFontMedium, // Medium font for fare unit
+                        fontSize = 10.sp, // Font size for fare unit
+                        text = "/${item?.fareUnit?.uppercase(Locale.US) ?: "-"}", // Displays fare unit
+                        maxLines = 1, // Ensures text doesn't wrap
+                        overflow = TextOverflow.Ellipsis, // Adds ellipsis if the text overflows
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false // No font padding
+                            )
+                        )
+                    )
+                }
+
+                // Box containing the "Book Now" button
+                Box(
+                    modifier = Modifier
+                        .clickable {
+                            // Log the "Book Now" button click event
+                            GzLogger.d("FareDetails", "Book Now button clicked")
+                        }
+                        .background(
+                            brush = gradient, // Gradient background for the button
+                            shape = RoundedCornerShape(15.dp) // Rounded corners for the button
+                        )
+                        .padding(
+                            horizontal = 36.dp, // Padding inside the button (horizontal)
+                            vertical = 18.dp // Padding inside the button (vertical)
+                        ),
+                ) {
+                    // Text inside the "Book Now" button
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.Center), // Centers the text inside the box
+                        color = Background, // Text color for the button
+                        fontFamily = RubikFontMedium, // Custom font for the button text
+                        fontSize = 16.sp, // Font size for the button text
+                        text = "Book Now", // Text displayed on the button
+                        maxLines = 1, // Ensures the text doesn't wrap
+                        overflow = TextOverflow.Ellipsis, // Adds ellipsis if the text overflows
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false // No font padding
+                            )
+                        )
+                    )
+                }
+            }
         }
     }
 }
