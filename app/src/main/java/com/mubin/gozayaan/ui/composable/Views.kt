@@ -84,6 +84,7 @@ import com.mubin.gozayaan.base.utils.GilroyFontMedium
 import com.mubin.gozayaan.base.utils.RubikFontBold
 import com.mubin.gozayaan.base.utils.RubikFontMedium
 import com.mubin.gozayaan.base.utils.RubikFontRegular
+import com.mubin.gozayaan.base.utils.createImageRequest
 import com.mubin.gozayaan.data.model.DestinationResponse
 import com.mubin.gozayaan.ui.home.BookmarkScreen
 import com.mubin.gozayaan.ui.home.DetailsScreen
@@ -490,21 +491,8 @@ fun RecommendationCardHorizontal(
             .clip(RoundedCornerShape(20.dp))
             .background(Surface),
     ) {
-        // Image
-        val listener = object : ImageRequest.Listener {}
 
-        val imageRequest = ImageRequest.Builder(context)
-            .data(data = recommendation.heroImage)
-            .listener(listener = listener)
-            .dispatcher(dispatcher = Dispatchers.IO)
-            .memoryCacheKey(key = recommendation.heroImage)
-            .diskCacheKey(key = recommendation.heroImage)
-            .error(drawableResId = R.drawable.ic_no_image_available)
-            .fallback(drawableResId = R.drawable.ic_no_image_available)
-            .crossfade(enable = true)
-            .diskCachePolicy(policy = CachePolicy.ENABLED)
-            .memoryCachePolicy(policy = CachePolicy.ENABLED)
-            .build()
+        val imageRequest = createImageRequest(context, recommendation.heroImage)
 
         // Sub Compose AsyncImage from Coil with zoom functionality
         SubcomposeAsyncImage(
@@ -594,21 +582,8 @@ fun RecommendationCardVertical(
             .clip(RoundedCornerShape(20.dp))
             .background(Surface),
     ) {
-        // Image
-        val listener = object : ImageRequest.Listener {}
 
-        val imageRequest = ImageRequest.Builder(context)
-            .data(data = recommendation.heroImage)
-            .listener(listener = listener)
-            .dispatcher(dispatcher = Dispatchers.IO)
-            .memoryCacheKey(key = recommendation.heroImage)
-            .diskCacheKey(key = recommendation.heroImage)
-            .error(drawableResId = R.drawable.ic_no_image_available)
-            .fallback(drawableResId = R.drawable.ic_no_image_available)
-            .crossfade(enable = true)
-            .diskCachePolicy(policy = CachePolicy.ENABLED)
-            .memoryCachePolicy(policy = CachePolicy.ENABLED)
-            .build()
+        val imageRequest = createImageRequest(context, recommendation.heroImage)
 
         SubcomposeAsyncImage(
             modifier = Modifier
@@ -732,21 +707,7 @@ fun AutoImageSlider(imageUrls: List<String?>?, onBackPressed: () -> Unit) {
             verticalAlignment = Alignment.Top
         ) { page ->
 
-            // Image
-            val listener = object : ImageRequest.Listener {}
-
-            val imageRequest = ImageRequest.Builder(context)
-                .data(data = imageUrls?.get(page))
-                .listener(listener = listener)
-                .dispatcher(dispatcher = Dispatchers.IO)
-                .memoryCacheKey(key = imageUrls?.get(page))
-                .diskCacheKey(key = imageUrls?.get(page))
-                .error(drawableResId = R.drawable.ic_no_image_available_text)
-                .fallback(drawableResId = R.drawable.ic_no_image_available_text)
-                .crossfade(enable = true)
-                .diskCachePolicy(policy = CachePolicy.ENABLED)
-                .memoryCachePolicy(policy = CachePolicy.ENABLED)
-                .build()
+            val imageRequest = createImageRequest(context, imageUrls?.get(page))
 
             SubcomposeAsyncImage(
                 modifier = Modifier
@@ -782,7 +743,8 @@ fun AutoImageSlider(imageUrls: List<String?>?, onBackPressed: () -> Unit) {
 
         GlobalTopBar(
             modifier = Modifier
-                .align(Alignment.TopCenter),
+                .align(Alignment.TopCenter)
+                .padding(top = 10.dp),
             onBackPressed = {
                 onBackPressed()
             }
