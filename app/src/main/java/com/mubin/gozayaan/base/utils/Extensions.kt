@@ -9,6 +9,7 @@ import com.mubin.gozayaan.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.Currency
 
 /**
  * Executes a given suspendable block of code (`body`) within a specific coroutine context
@@ -65,6 +66,22 @@ fun createImageRequest(context: Context, url: String?): ImageRequest {
         .diskCachePolicy(policy = CachePolicy.ENABLED)
         .memoryCachePolicy(policy = CachePolicy.ENABLED)
         .build()
+}
+
+/**
+ * Extension function to get the currency symbol for a given currency code.
+ *
+ * @param currencyCode The 3-letter ISO 4217 currency code (e.g., "USD", "INR").
+ * @return The corresponding currency symbol (e.g., "$", "₹").
+ */
+fun String.getCurrencySymbol(): String {
+    return try {
+        val currency = Currency.getInstance(this) // Get the currency instance for the code
+        currency.symbol // Return the currency symbol
+    } catch (e: IllegalArgumentException) {
+        // Return an empty string if the currency code is invalid
+        ""
+    }
 }
 
 // Composable Extension Fonts
