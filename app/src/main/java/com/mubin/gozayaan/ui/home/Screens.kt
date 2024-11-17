@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mubin.gozayaan.R
 import com.mubin.gozayaan.base.theme.Background
 import com.mubin.gozayaan.base.theme.GoZayaanTheme
@@ -80,6 +81,8 @@ fun MainScreen(uiState: HomeUiState) {
 
 @Composable
 fun HomeScreen(uiState: HomeUiState, navController: NavHostController) {
+
+    ShowHideStatusBarScreen(isVisible = true)
 
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -180,6 +183,9 @@ fun HomeScreen(uiState: HomeUiState, navController: NavHostController) {
 
 @Composable
 fun BookmarkScreen(uiState: HomeUiState) {
+
+    ShowHideStatusBarScreen(isVisible = true)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -195,6 +201,9 @@ fun BookmarkScreen(uiState: HomeUiState) {
 
 @Composable
 fun NotificationsScreen(uiState: HomeUiState) {
+
+    ShowHideStatusBarScreen(isVisible = true)
+
     Box(modifier = Modifier.fillMaxSize().background(Background), contentAlignment = Alignment.Center) {
         Text(color = Color.White, text = "Notifications Screen")
     }
@@ -202,6 +211,9 @@ fun NotificationsScreen(uiState: HomeUiState) {
 
 @Composable
 fun ProfileScreen(uiState: HomeUiState) {
+
+    ShowHideStatusBarScreen(isVisible = true)
+
     Box(modifier = Modifier.fillMaxSize().background(Background), contentAlignment = Alignment.Center) {
         Text(color = Color.White, text = "Profile Screen")
     }
@@ -209,6 +221,8 @@ fun ProfileScreen(uiState: HomeUiState) {
 
 @Composable
 fun RecommendedScreen(isSearch: Boolean, uiState: HomeUiState, navController: NavController) {
+
+    ShowHideStatusBarScreen(isVisible = true)
 
     Scaffold(
         modifier = Modifier
@@ -288,11 +302,12 @@ fun RecommendedScreen(isSearch: Boolean, uiState: HomeUiState, navController: Na
 @Composable
 fun DetailsScreen(item: DestinationResponse.DestinationResponseItem?, navController: NavController) {
 
+    ShowHideStatusBarScreen(isVisible = false)
+
     Column(
       modifier = Modifier
           .background(Background)
           .fillMaxSize()
-          .padding(WindowInsets.statusBars.asPaddingValues())
     ) {
 
         AutoImageSlider(
@@ -434,6 +449,18 @@ fun DetailsScreen(item: DestinationResponse.DestinationResponseItem?, navControl
 
     }
 
+}
+
+@Composable
+fun ShowHideStatusBarScreen(isVisible: Boolean) {
+    val systemUiController = rememberSystemUiController()
+
+    // Hide the status bar
+    systemUiController.setSystemBarsColor(
+        color = if (isVisible) Background else Color.Transparent,
+        darkIcons = false
+    )
+    systemUiController.isStatusBarVisible = isVisible
 }
 
 @Preview(showBackground = true)
