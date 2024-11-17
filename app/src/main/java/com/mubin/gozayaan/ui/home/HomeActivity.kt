@@ -10,9 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.mubin.gozayaan.base.theme.GoZayaanTheme
 import com.mubin.gozayaan.base.utils.executeBodyOrReturnNullSuspended
 import com.mubin.gozayaan.ui.composable.CustomAlertDialog
@@ -29,13 +27,6 @@ class HomeActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             GoZayaanTheme {
-
-                val systemUiController = rememberSystemUiController()
-                // Set the status bar color
-                systemUiController.setStatusBarColor(
-                    color = Color(0xff1D2026), // Desired status bar color
-                    darkIcons = false
-                )
 
                 val shouldShowDialog = remember { mutableStateOf(false) }
                 val scope = rememberCoroutineScope()
