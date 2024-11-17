@@ -1,6 +1,5 @@
 package com.mubin.gozayaan.base.theme
 
-import android.view.Surface
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
