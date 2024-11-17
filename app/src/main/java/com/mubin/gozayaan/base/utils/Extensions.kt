@@ -1,7 +1,10 @@
 package com.mubin.gozayaan.base.utils
 
+import android.content.Context
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.mubin.gozayaan.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +32,39 @@ suspend inline fun <T> executeBodyOrReturnNullSuspended(
             null
         }
     }
+}
+
+/**
+ * Creates an [ImageRequest] to load an image from the provided URL.
+ *
+ * This function constructs a Coil [ImageRequest] with the following configurations:
+ * - The image source is the provided URL (`url`).
+ * - It runs the image request on a background IO thread using the `Dispatchers.IO` dispatcher.
+ * - Caching strategies are applied for both memory and disk caches:
+ *   - The memory cache key and disk cache key are both set to the image URL (`url`).
+ *   - Caching is enabled for both memory and disk caches.
+ * - In case of errors or fallback scenarios, a default placeholder image (`ic_no_image_available`) is used.
+ * - Crossfade animation is enabled when loading the image.
+ *
+ * @param context The context used to build the [ImageRequest].
+ * @param url The URL of the image to be loaded.
+ *
+ * @return An [ImageRequest] that can be passed to Coil's image loading mechanisms.
+ *
+ * @see ImageRequest
+ */
+fun createImageRequest(context: Context, url: String?): ImageRequest {
+    return ImageRequest.Builder(context)
+        .data(data = url)
+        .dispatcher(dispatcher = Dispatchers.IO)
+        .memoryCacheKey(key = url)
+        .diskCacheKey(key = url)
+        .error(drawableResId = R.drawable.ic_no_image_available)
+        .fallback(drawableResId = R.drawable.ic_no_image_available)
+        .crossfade(enable = true)
+        .diskCachePolicy(policy = CachePolicy.ENABLED)
+        .memoryCachePolicy(policy = CachePolicy.ENABLED)
+        .build()
 }
 
 // Composable Extension Fonts
