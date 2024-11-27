@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mubin.gozayaan"
+    namespace = "com.mubin.triphaven"
     compileSdk = 35
 
     defaultConfig {
