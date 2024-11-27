@@ -77,27 +77,6 @@ GoZayaan_Compose_Clean_Arch_Hilt/
 
 ---
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/maksudmubin/GoZayaan_Compose_Clean_Arch_Hilt/issues) to see if there’s anything you’d like to work on.
-
-1. Fork the project.
-2. Create your feature branch:
-   ```bash
-   git checkout -b feature/my-feature
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m 'Add some feature'
-   ```
-4. Push to the branch:
-   ```bash
-   git push origin feature/my-feature
-   ```
-5. Open a pull request.
-
----
-
 ## 💬 Contact
 
 For any queries or suggestions, feel free to reach out:
