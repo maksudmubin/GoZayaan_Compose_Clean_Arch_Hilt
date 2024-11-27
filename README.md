@@ -1,5 +1,5 @@
 
-# GoZayaan - Compose Clean Architecture with Hilt
+# TriiHaven - Compose Clean Architecture with Hilt
 
 A modern Android application demonstrating a clean architecture approach, Jetpack Compose, and Hilt for dependency injection. This repository showcases best practices in Android development for building scalable, testable, and maintainable applications.
 
