@@ -46,7 +46,7 @@ This project follows **Clean Architecture**, ensuring the following:
 ## 📂 Project Structure
 
 ```
-GoZayaan_Compose_Clean_Arch_Hilt/
+Jetpack_Compose_Clean_Arch_Hilt/
 ├── app/                      # Application module
 │   ├── base/                 # Dependency injection setup, Utilities
 │   ├── data/                 # Data layer (repositories, data sources)
@@ -61,7 +61,7 @@ GoZayaan_Compose_Clean_Arch_Hilt/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/maksudmubin/GoZayaan_Compose_Clean_Arch_Hilt.git
+   git clone https://github.com/maksudmubin/Jetpack_Compose_Clean_Arch_Hilt.git
    ```
 2. Open the project in **Android Studio** (Arctic Fox or later).
 3. Sync the project with Gradle files.
