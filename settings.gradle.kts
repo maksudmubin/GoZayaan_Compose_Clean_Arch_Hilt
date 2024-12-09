@@ -21,4 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "TripHaven"
 include(":app")
- 
+include(":trip-heaven-core")
+include(":trip-heaven-ui")
+include(":code-android")
+include(":core")
