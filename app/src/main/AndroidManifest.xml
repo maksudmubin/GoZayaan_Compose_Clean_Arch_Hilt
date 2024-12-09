@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoZayaan"
         tools:targetApi="31">
+
         <activity
-            android:name=".ui.home.HomeActivity"
-            android:exported="true"
-            android:theme="@style/Theme.GoZayaan">
+            android:name="com.example.trip_heaven_ui.ui.home.HomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

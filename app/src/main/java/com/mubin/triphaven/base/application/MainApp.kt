@@ -1,7 +1,7 @@
 package com.mubin.triphaven.base.application
 
 import android.app.Application
-import com.mubin.triphaven.base.utils.logger.GzLogger
+import com.example.core.utils.logger.GzLogger
 import dagger.hilt.android.HiltAndroidApp
 
 /**

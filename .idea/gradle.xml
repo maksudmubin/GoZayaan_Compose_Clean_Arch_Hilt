@@ -11,6 +11,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/code-android" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/trip-heaven-core" />
+            <option value="$PROJECT_DIR$/trip-heaven-ui" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

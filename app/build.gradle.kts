@@ -61,27 +61,16 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation (libs.androidx.navigation.compose)
     implementation (libs.androidx.material)
-    implementation (libs.coil.compose)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation (libs.accompanist.systemuicontroller)
 
     // Hilt dependency injection
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt)
+    implementation(project(":trip-heaven-ui"))
+    implementation(project(":core"))
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.swiperefreshlayout)
-
-    // Retrofit
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
-    implementation (libs.converter.scalars)
-
-    // Okhttp
-    implementation (libs.okhttp)
-    implementation (libs.okhttp.interceptor)
-
-    // Interceptor
-    implementation (libs.okhttpprofiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
